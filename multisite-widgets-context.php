@@ -5,7 +5,7 @@
  * Description: A WordPress Multisite Plugin that runs a Widget in a context of another site that belongs to the network 
  * Author: nicholas_io
  * Author URI: http://nicholasandre.com.br
- * Version: 1.0.1
+ * Version: 1.0.2
  * License: GPLv2 or later
  * Text Domain: wpmulwc
  * Domain Path: /languages/
@@ -144,7 +144,7 @@ class Multisite_Widgets_Context {
 	 * Display extra fields on every single Widget registered with WordPress
 	 */
 	public function after_widget_form( $_this, $return, $instance ) {
-		if ( $GLOBALS[ '_wpmulwc_switched_admin'  ] ) {
+		if ( isset( $GLOBALS[ '_wpmulwc_switched_admin' ] ) && $GLOBALS[ '_wpmulwc_switched_admin' ] ) {
 			$GLOBALS[ '_wpmulwc_switched_admin'  ] = false;
 			restore_current_blog();
 		}
@@ -221,7 +221,7 @@ class Multisite_Widgets_Context {
 	 */
 	public function after_render_previous_widget( $params ) {
 		//Before render, check if we need to restore to current blog
-		if ( $GLOBALS[ '_wpmulwc_switched' ] ) {
+		if ( isset( $GLOBALS[ '_wpmulwc_switched' ] ) && $GLOBALS[ '_wpmulwc_switched' ] ) {
 			$GLOBALS[ '_wpmulwc_switched' ] = false;
 			restore_current_blog();	
 		}
@@ -251,4 +251,30 @@ class Multisite_Widgets_Context {
 
 register_activation_hook( __FILE__ , array( 'Multisite_Widgets_Context', 'activate') );
 add_action( 'plugins_loaded', array( 'Multisite_Widgets_Context', 'get_instance' ), 0 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
