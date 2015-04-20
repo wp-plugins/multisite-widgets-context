@@ -5,7 +5,7 @@
  * Description: A WordPress Multisite Plugin that runs a Widget in a context of another site that belongs to the network 
  * Author: nicholas_io
  * Author URI: http://nicholasandre.com.br
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPLv2 or later
  * Text Domain: wpmulwc
  * Domain Path: /languages/
@@ -66,6 +66,9 @@ class Multisite_Widgets_Context {
 		add_action( 'widget_display_callback', array( $this, 'before_render_widget'), 99, 3 );
 		//It's a trick: this filter fires after a widget is displayed, but we use to restore_current_blog if needed
 		add_filter( 'dynamic_sidebar_params', array( $this, 'after_render_previous_widget'), 99, 1 );
+
+		//After render all widgets return back to the original blog
+		add_action( 'dynamic_sidebar_after', array( $this, 'after_render_all_widgets' ), 99 );
 
 		$this->arrSites = array();
 		$this->blogsID  = array();
@@ -227,6 +230,13 @@ class Multisite_Widgets_Context {
 	}
 
 	/**
+	 * Ensures that we will be on right blog with the last widget is switched
+	 */
+	public function after_render_all_widgets( $index ) {
+		$this->after_render_previous_widget( null );
+	}
+
+	/**
 	 * Load scripts js and styles css
 	 */
 	public function enqueue_scripts() {
@@ -241,30 +251,4 @@ class Multisite_Widgets_Context {
 
 register_activation_hook( __FILE__ , array( 'Multisite_Widgets_Context', 'activate') );
 add_action( 'plugins_loaded', array( 'Multisite_Widgets_Context', 'get_instance' ), 0 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
